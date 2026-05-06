@@ -3,7 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abrazo Kawaii Final</title>
+    <title>Abrazo Kawaii - Estilo Neón Suave</title>
+    
+    <!-- Importamos la fuente 'Tilt Neon' y 'Vibur' de Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tilt+Neon&family=Vibur&display=swap" rel="stylesheet">
+
     <style>
         /* --- Estilos Globales --- */
         body, html {
@@ -11,7 +17,7 @@
             padding: 0;
             width: 100%;
             height: 100%;
-            background-color: #000000; /* Fondo negro puro */
+            background-color: #050008; /* Un negro con un levísimo toque morado oscuro para ambientar */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -23,27 +29,27 @@
         #btn-comenzar {
             padding: 18px 45px;
             font-size: 24px;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
             text-transform: uppercase;
-            color: #edacf5;
-            background-color: #6400a3; 
-            border: 2px solid #9900ff;
+            color: #d84dff; /* Letras moradas */
+            background-color: transparent; 
+            border: 2px solid #cc00ff;
             border-radius: 60px;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 10px rgba(204, 0, 255, 0.3), inset 0 0 10px rgba(204, 0, 255, 0.3);
+            text-shadow: 0 0 5px rgba(216, 77, 255, 0.5);
+            font-family: 'Tilt Neon', sans-serif;
             z-index: 10;
         }
 
         #btn-comenzar:hover {
-            background-color: #5e006d;
-            color: #ffffff;
-            border-color: #cc00ff;
-            box-shadow: 0 0 25px rgba(242, 0, 226, 0.6);
+            background-color: rgba(204, 0, 255, 0.15);
+            box-shadow: 0 0 20px rgba(204, 0, 255, 0.6), inset 0 0 15px rgba(204, 0, 255, 0.6);
             transform: scale(1.08);
         }
 
-        /* --- Contenedor de la Escena (Oculto inicialmente) --- */
+        /* --- Contenedor de la Escena --- */
         #escena-animacion {
             display: none; /* Se activa con JS */
             position: relative;
@@ -51,37 +57,87 @@
             height: 100%;
             justify-content: center;
             align-items: center;
+            flex-direction: column; 
+            text-align: center;
+        }
+
+        /* --- Estilos del Mensaje de Texto (NEÓN MORADO SUAVE) --- */
+        #mensaje-kawaii {
+            font-family: 'Vibur', cursive; 
+            color: #d84dff; /* El centro ahora es un morado claro/brillante, no blanco */
+            font-size: 55px;
+            margin-bottom: 30px;
+            opacity: 0; 
+            transform: translateY(-20px);
+            
+            /* Sombras ajustadas para un resplandor 100% morado y menos agresivo */
+            text-shadow: 
+                0 0 5px #d84dff,
+                0 0 15px #cc00ff,
+                0 0 30px #cc00ff,
+                0 0 50px #8a00b8,
+                0 0 70px #8a00b8;
         }
 
         /* --- Estilos de la Imagen Completa --- */
         #personajes-abrazandose {
-            max-width: 80%; /* Asegura que no sea demasiado grande */
-            max-height: 80%;
-            opacity: 0; /* Invisible al inicio */
+            max-width: 70%; 
+            max-height: 70%;
+            opacity: 0; 
             display: block;
             margin: 0 auto;
+            filter: drop-shadow(0px 0px 15px rgba(204, 0, 255, 0.2)); /* Reflejo más suave */
         }
 
-        /* --- Clase de Animación (activada por JS) --- */
+        /* --- Clases de Animación (activadas por JS) --- */
+        .iniciar-animacion #mensaje-kawaii {
+            animation: aparecerTextoNeon 1.5s ease-out 1.5s forwards, parpadeoNeon 3s infinite 3s; 
+        }
+
         .iniciar-animacion #personajes-abrazandose {
-            /* Usamos la animación 'aparecerKawaii' */
             animation: aparecerKawaii 1.5s ease-out forwards;
         }
 
         /* --- Keyframes de Animación --- */
 
-        /* Una animación de aparición suave con un ligero rebotar 'kawaii' */
-        @keyframes aparecerKawaii {
+        /* Animación para el texto */
+        @keyframes aparecerTextoNeon {
             0% {
                 opacity: 0;
-                transform: scale(0.5); /* Empieza pequeña */
-            }
-            70% {
-                transform: scale(1.1); /* Crece un poco más */
+                transform: translateY(-30px);
             }
             100% {
                 opacity: 1;
-                transform: scale(1); /* Se establece en su tamaño normal */
+                transform: translateY(0);
+            }
+        }
+
+        /* Parpadeo actualizado con los nuevos tonos morados */
+        @keyframes parpadeoNeon {
+            0%, 18%, 22%, 25%, 53%, 57%, 100% {
+                text-shadow: 
+                    0 0 5px #d84dff, 0 0 15px #cc00ff, 0 0 30px #cc00ff,
+                    0 0 50px #8a00b8, 0 0 70px #8a00b8;
+                color: #d84dff;
+            }
+            20%, 24%, 55% {
+                text-shadow: none; 
+                color: #5c007a; /* Cuando "parpadea" se ve morado oscuro apagado */
+            }
+        }
+
+        /* Animación para la imagen */
+        @keyframes aparecerKawaii {
+            0% {
+                opacity: 0;
+                transform: scale(0.5); 
+            }
+            70% {
+                transform: scale(1.05); 
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1); 
             }
         }
     </style>
@@ -94,24 +150,24 @@
     <!-- Contenedor de la Animación -->
     <div id="escena-animacion">
         
-        <!-- Usamos la imagen proporcionada, guardada como 'personajes_abrazo.png' -->
+        <!-- Mensaje de Texto Neón -->
+        <div id="mensaje-kawaii">te quiero mucho mai</div>
+        
+        <!-- Imagen -->
         <img id="personajes-abrazandose" src="personajes_abrazo.png" alt="Personajes Kawaii Abrazándose">
 
     </div>
 
     <script>
         document.getElementById('btn-comenzar').addEventListener('click', function() {
-            // 1. Ocultar el botón
             this.style.display = 'none';
 
-            // 2. Mostrar el contenedor de la animación
             const escena = document.getElementById('escena-animacion');
             escena.style.display = 'flex';
 
-            // 3. Añadir la clase que dispara la animación CSS después de un breve retraso
             setTimeout(() => {
                 escena.classList.add('iniciar-animacion');
-            }, 150); 
+            }, 100); 
         });
     </script>
 </body>
