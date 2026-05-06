@@ -2,227 +2,117 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <!-- Meta tag mejorado para evitar zoom accidental en celulares -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Para Ti</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abrazo Kawaii Final</title>
     <style>
-        /* Fondo con degradado radial para más profundidad */
-        body {
-            background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
-            color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+        /* --- Estilos Globales --- */
+        body, html {
             margin: 0;
-            overflow: hidden;
-        }
-
-        .contenedor {
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000000; /* Fondo negro puro */
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
-            width: 90%;
-            max-width: 500px;
-            position: relative;
+            align-items: center;
+            overflow: hidden;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
-        /* Botón inicial mejorado */
-        #btnLeer {
-            background-color: transparent;
-            color: #b088f9;
-            border: 2px solid #b088f9;
-            padding: 12px 35px;
-            font-size: 1.2rem;
-            border-radius: 30px;
+        /* --- Estilos del Botón --- */
+        #btn-comenzar {
+            padding: 18px 45px;
+            font-size: 24px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #edacf5;
+            background-color: #6400a3; 
+            border: 2px solid #9900ff;
+            border-radius: 60px;
             cursor: pointer;
             transition: all 0.3s ease;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            position: absolute;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
             z-index: 10;
-            /* Evitar el resaltado azul al tocar en celulares */
-            -webkit-tap-highlight-color: transparent; 
         }
 
-        #btnLeer:hover, #btnLeer:active {
-            background-color: #b088f9;
-            color: #000;
-            box-shadow: 0 0 20px rgba(176, 136, 249, 0.7);
-            transform: scale(1.05);
+        #btn-comenzar:hover {
+            background-color: #5e006d;
+            color: #ffffff;
+            border-color: #cc00ff;
+            box-shadow: 0 0 25px rgba(242, 0, 226, 0.6);
+            transform: scale(1.08);
         }
 
-        /* Contenedor del contenido */
-        #contenido {
-            display: flex;
-            flex-direction: column;
+        /* --- Contenedor de la Escena (Oculto inicialmente) --- */
+        #escena-animacion {
+            display: none; /* Se activa con JS */
+            position: relative;
+            width: 100%;
+            height: 100%;
+            justify-content: center;
             align-items: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 1s ease-in-out;
-            width: 100%;
         }
 
-        canvas {
-            margin-bottom: 25px;
-            filter: drop-shadow(0 0 12px rgba(255, 51, 102, 0.6));
+        /* --- Estilos de la Imagen Completa --- */
+        #personajes-abrazandose {
+            max-width: 80%; /* Asegura que no sea demasiado grande */
+            max-height: 80%;
+            opacity: 0; /* Invisible al inicio */
+            display: block;
+            margin: 0 auto;
         }
 
-        .latido {
-            animation: palpitar 1.5s infinite ease-in-out;
+        /* --- Clase de Animación (activada por JS) --- */
+        .iniciar-animacion #personajes-abrazandose {
+            /* Usamos la animación 'aparecerKawaii' */
+            animation: aparecerKawaii 1.5s ease-out forwards;
         }
 
-        @keyframes palpitar {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.08); filter: drop-shadow(0 0 25px rgba(255, 51, 102, 0.9)); }
-            100% { transform: scale(1); }
-        }
+        /* --- Keyframes de Animación --- */
 
-        /* Recuadro de la confesión (Efecto Glassmorphism) */
-        .mensaje-caja {
-            border: 1px solid rgba(138, 43, 226, 0.4);
-            background-color: rgba(20, 5, 35, 0.6);
-            backdrop-filter: blur(8px); /* Efecto de cristal borroso */
-            -webkit-backdrop-filter: blur(8px);
-            padding: 25px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(138, 43, 226, 0.15);
-            line-height: 1.6;
-            font-size: 1.1rem;
-            text-align: center;
-            width: 100%;
-            box-sizing: border-box;
-            
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 1.2s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-
-        .mensaje-caja p {
-            margin: 10px 0;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-        }
-
-        .mensaje-caja.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* AJUSTES PARA CELULARES (Responsive Design) */
-        @media (max-width: 480px) {
-            #btnLeer {
-                padding: 10px 28px;
-                font-size: 1rem;
+        /* Una animación de aparición suave con un ligero rebotar 'kawaii' */
+        @keyframes aparecerKawaii {
+            0% {
+                opacity: 0;
+                transform: scale(0.5); /* Empieza pequeña */
             }
-
-            canvas {
-                transform: scale(0.9); /* Escala un poco el corazón en pantallas chicas */
-                margin-bottom: 15px;
+            70% {
+                transform: scale(1.1); /* Crece un poco más */
             }
-
-            .mensaje-caja {
-                padding: 20px 15px;
-                font-size: 0.95rem; /* Letra un poco más chica para que no sature */
-                border-radius: 12px;
+            100% {
+                opacity: 1;
+                transform: scale(1); /* Se establece en su tamaño normal */
             }
         }
     </style>
 </head>
 <body>
 
-    <div class="contenedor">
-        <button id="btnLeer">Leer</button>
+    <!-- Botón Inicial -->
+    <button id="btn-comenzar">Comenzar</button>
 
-        <div id="contenido">
-            <canvas id="lienzoCorazon" width="180" height="160"></canvas>
-            <div class="mensaje-caja" id="mensajeCaja">
-                <p>Para maia.</p>
-                <p>Como dije seria una confesión, eres una chica muy linda y la verdad he quedado fascinado por ti y por lo que eres, me gustas mucho y lo dire claro como ya habia dicho antes soy directo, hare lo posible por conquistar tu corazon, arme esto como un detalle y prueba de que quiero, asi que espero lo aprecies y entiendas mas lo que siento.</p>
-            </div>
-        </div>
+    <!-- Contenedor de la Animación -->
+    <div id="escena-animacion">
+        
+        <!-- Usamos la imagen proporcionada, guardada como 'personajes_abrazo.png' -->
+        <img id="personajes-abrazandose" src="personajes_abrazo.png" alt="Personajes Kawaii Abrazándose">
+
     </div>
 
     <script>
-        const btnLeer = document.getElementById('btnLeer');
-        const contenido = document.getElementById('contenido');
-        const canvas = document.getElementById('lienzoCorazon');
-        const ctx = canvas.getContext('2d');
-        const mensajeCaja = document.getElementById('mensajeCaja');
+        document.getElementById('btn-comenzar').addEventListener('click', function() {
+            // 1. Ocultar el botón
+            this.style.display = 'none';
 
-        const escala = 4.5;
-        const offsetX = canvas.width / 2;
-        const offsetY = canvas.height / 2.2; 
-        const puntos = [];
-        const resolucion = 0.05; 
+            // 2. Mostrar el contenedor de la animación
+            const escena = document.getElementById('escena-animacion');
+            escena.style.display = 'flex';
 
-        function x(t) {
-            return 16 * Math.pow(Math.sin(t), 3);
-        }
-
-        function y(t) {
-            return 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
-        }
-
-        for (let t = 0; t <= Math.PI * 2; t += resolucion) {
-            puntos.push({
-                cx: offsetX + x(t) * escala,
-                cy: offsetY - y(t) * escala 
-            });
-        }
-
-        let indiceTrazo = 0;
-
-        function animarCorazon() {
-            if (indiceTrazo === 0) {
-                ctx.beginPath();
-                ctx.moveTo(puntos[0].cx, puntos[0].cy);
-                ctx.strokeStyle = '#ff3366';
-                ctx.lineWidth = 2.5;
-                ctx.lineCap = 'round';
-                ctx.lineJoin = 'round';
-            }
-
-            if (indiceTrazo < puntos.length) {
-                for(let i = 0; i < 3; i++) {
-                    if(indiceTrazo < puntos.length) {
-                        ctx.lineTo(puntos[indiceTrazo].cx, puntos[indiceTrazo].cy);
-                        indiceTrazo++;
-                    }
-                }
-                ctx.stroke();
-                requestAnimationFrame(animarCorazon);
-            } else {
-                // Gradiente para el relleno del corazón
-                const gradient = ctx.createRadialGradient(offsetX, offsetY, 10, offsetX, offsetY, 80);
-                gradient.addColorStop(0, 'rgba(255, 51, 102, 0.6)');
-                gradient.addColorStop(1, 'rgba(200, 20, 60, 0.4)');
-                
-                ctx.fillStyle = gradient;
-                ctx.fill();
-                
-                canvas.classList.add('latido');
-
-                setTimeout(() => {
-                    mensajeCaja.classList.add('visible');
-                }, 400); 
-            }
-        }
-
-        btnLeer.addEventListener('click', () => {
-            btnLeer.style.opacity = '0';
-            btnLeer.style.pointerEvents = 'none';
-            
+            // 3. Añadir la clase que dispara la animación CSS después de un breve retraso
             setTimeout(() => {
-                btnLeer.style.display = 'none';
-                contenido.style.opacity = '1';
-                contenido.style.pointerEvents = 'auto';
-                
-                animarCorazon();
-            }, 300);
+                escena.classList.add('iniciar-animacion');
+            }, 150); 
         });
     </script>
-
 </body>
 </html>
